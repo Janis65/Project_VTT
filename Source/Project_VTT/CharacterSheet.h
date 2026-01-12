@@ -17,6 +17,16 @@ enum class EProficiencyLevel : uint8
     Expertise   UMETA(DisplayName = "Expertise")
 };
 
+// Odpornoœci
+UENUM(BlueprintType)
+enum class EResistances : uint8
+{
+    None                UMETA(DisplayName = "None"),
+    Resistance          UMETA(DisplayName = "Resistance"),
+    Invulnerability     UMETA(DisplayName = "Invulnerability"),
+    Vulnerability       UMETA(DisplayName = "Vulnerability")
+};
+
 // Charakter postaci (Alignment)
 UENUM(BlueprintType)
 enum class EAlignment : uint8
@@ -32,7 +42,7 @@ enum class EAlignment : uint8
     ChaoticEvil
 };
 
-// Rodzaje koœci (do Hit Dice i broni)
+// Rodzaje koœci
 UENUM(BlueprintType)
 enum class EDiceType : uint8
 {
@@ -63,18 +73,18 @@ struct FClasses
 {
     GENERATED_BODY()
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Barbarian = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Bard = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Cleric = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Druid = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Fighter = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Monk = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Paladin = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Ranger = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Rogue = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Sorcerer = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Warlock = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Wizard = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Barbarian;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Bard;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Cleric;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Druid;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Fighter;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Monk;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Paladin;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Ranger;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Rogue;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Sorcerer;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Warlock;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Wizard;
 };
 
 // 3. Rzuty Obronne (Saving Throws) - Flagi czy jest bieg³oœæ
@@ -117,7 +127,21 @@ struct FSkillProficiencies
     UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Survival = EProficiencyLevel::None;
 };
 
-// 5. ¯ycie i Œmieræ (Vitals)
+// 5. Akcje (Actions)
+USTRUCT(BlueprintType)
+struct FActions
+{
+    GENERATED_BODY()
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 MaxActions;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 CurrentActions;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 MaxBonusActions;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 CurrentBonusActions;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 MaxReactions;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 CurrentReactions;
+};
+
+// 6. ¯ycie i Œmieræ (Vitals)
 USTRUCT(BlueprintType)
 struct FVitals
 {
@@ -137,16 +161,60 @@ struct FVitals
     UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 DeathSaveFailures;  // 0-3
 };
 
-// 6. Pieni¹dze (Currency)
+// 7. Odpornoœci (Resistances) - Flagi czy jest odporny
 USTRUCT(BlueprintType)
-struct FCurrency
+struct FDamageResistances
 {
     GENERATED_BODY()
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Copper = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Silver = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Gold = 0;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Platinum = 0;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) EResistances Piercing = EResistances::None;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) EResistances Slashing = EResistances::None;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) EResistances Bludgeoning = EResistances::None;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) EResistances Acid = EResistances::None;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) EResistances Cold = EResistances::None;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) EResistances Fire = EResistances::None;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) EResistances Force = EResistances::None;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) EResistances Lightning = EResistances::None;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) EResistances Necrotic = EResistances::None;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) EResistances Poison = EResistances::None;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) EResistances Psychic = EResistances::None;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) EResistances Radiant = EResistances::None;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) EResistances Thunder = EResistances::None;
+};
+
+// 8. Czary (Spell Slots)
+USTRUCT(BlueprintType)
+struct FSpellSlots
+{
+    GENERATED_BODY()
+
+    // Poziomy 1-9
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level1_Max;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level1_Current;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level2_Max;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level2_Current;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level3_Max;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level3_Current;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level4_Max;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level4_Current;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level5_Max;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level5_Current;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level6_Max;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level6_Current;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level7_Max;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level7_Current;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level8_Max;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level8_Current;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level9_Max;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Level9_Current;
 };
 
 // ============================
@@ -158,7 +226,7 @@ struct FDnD_Character_Sheet
 {
     GENERATED_BODY()
 
-    // Sekcja 1: Informacje Fabularne
+    // Sekcja 1: Info
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1. Info")
     FString CharacterName = "Unknown Hero";
 
@@ -180,47 +248,65 @@ struct FDnD_Character_Sheet
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1. Info")
     int32 ExperiencePoints = 0;
 
-    // Sekcja 2: Statystyki G³ówne (STR, DEX...)
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2. Attributes")
-    FAbilityScores Abilities;
+    // Sekcja 2: Stats
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2. Stats")
+    FAbilityScores Stats;
 
-    // Sekcja 3: Walka i Przetrwanie
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "3. Combat")
-    FVitals Vitals;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2. Stats")
+    float DarkVisionDistance = 0.0f; // w cm (9 metrów = 30 stóp)
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "3. Combat")
-    int32 ArmorClass = 10;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "3. Combat")
-    int32 InitiativeBonus = 0;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "3. Combat")
-    float Speed = 900.0f; // w cm (9 metrów = 30 stóp)
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "3. Combat")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "2. Stats")
     int32 ProficiencyBonus = 2;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "3. Combat")
-    bool bInspiration = false;
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "3. Skills")
+    int32 PassivePerception = 10;
 
-    // --- Sekcja 4: Umiejêtnoœci ---
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4. Skills")
+    // Sekcja 3: Skills
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "3. Skills")
     FSavingThrows SavingThrows;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4. Skills")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "3. Skills")
     FSkillProficiencies Skills;
 
-    // --- Sekcja 5: Pieni¹dze ---
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "5. Inventory")
-    FCurrency Wallet;
+    // Sekcja 4: Combat
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4. Combat")
+    FActions Actions;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4. Combat")
+    FVitals Vitals;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4. Combat")
+    FDamageResistances Resistances;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4. Combat")
+    float MaxSpeed = 900.0f; // w cm (9 metrów = 30 stóp)
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4. Combat")
+    float CurrentSpeed = 900.0f; // w cm (9 metrów = 30 stóp)
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4. Combat")
+    int32 ArmorClass = 10;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4. Combat")
+    int32 InitiativeBonus = 0;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4. Combat")
+    bool bInspiration = false;
+
+    // Sekcja 5: Magic
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "5. Magic")
+    FSpellSlots SpellSlots;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "5. Magic") int32 SpellSaveDC = 10;
 
     // UWAGA: Ekwipunek (Inventory) zazwyczaj robi siê jako oddzieln¹ tablicê aktorów lub struktur itemów,
     // wiêc nie wrzucam go tutaj, ¿eby nie komplikowaæ pliku.
 };
 
-/**
- * Pusta klasa wymagana przez Unreal, aby plik nag³ówkowy dzia³a³
- */
+// ======================================================================
+// Pusta klasa wymagana przez Unreal, aby plik nag³ówkowy dzia³a³
+// ======================================================================
+
 UCLASS()
 class PROJECT_VTT_API UCharacterSheet : public UObject
 {
