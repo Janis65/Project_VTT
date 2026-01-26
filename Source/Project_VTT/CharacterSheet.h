@@ -27,6 +27,85 @@ enum class EResistances : uint8
     Vulnerability       UMETA(DisplayName = "Vulnerability")
 };
 
+// Rodzaje broni
+UENUM(BlueprintType)
+enum class EWeaponType : uint8
+{
+    // --- Kategorie Ogólne (jeœli postaæ ma bieg³oœæ w ca³ej grupie) ---
+    SimpleMelee     UMETA(DisplayName = "Simple Melee Weapons"),
+    MartialMelee    UMETA(DisplayName = "Martial Melee Weapons"),
+    SimpleRanged    UMETA(DisplayName = "Simple Ranged Weapons"),
+    MartialRanged   UMETA(DisplayName = "Martial Ranged Weapons"),
+
+    // --- Konkretne Bronie ---
+    Club,
+    Dagger,
+    Greatclub,
+    Handaxe,
+    Javelin,
+    LightHammer,
+    Mace,
+    Quarterstaff,
+    Sickle,
+    Spear,
+    LightCrossbow,
+    Dart,
+    Shortbow,
+    Sling,
+    Battleaxe,
+    Flail,
+    Glaive,
+    Greataxe,
+    Greatsword,
+    Halberd,
+    Lance,
+    Longsword,
+    Maul,
+    Morningstar,
+    Pike,
+    Rapier,
+    Scimitar,
+    Shortsword,
+    Trident,
+    WarPick,
+    Warhammer,
+    Whip,
+    Blowgun,
+    HandCrossbow,
+    HeavyCrossbow,
+    Longbow,
+    Net
+};
+
+// Rodzaje pancerzy
+UENUM(BlueprintType)
+enum class EArmorType : uint8
+{
+    Light       UMETA(DisplayName = "Light Armor"),
+    Medium      UMETA(DisplayName = "Medium Armor"),
+    Heavy       UMETA(DisplayName = "Heavy Armor"),
+    Shield      UMETA(DisplayName = "Shield")
+};
+
+// Klasy
+UENUM(BlueprintType)
+enum class ECharacterClass : uint8
+{
+    None        UMETA(DisplayName = "None"),
+    Barbarian   UMETA(DisplayName = "Barbarian"),
+    Bard        UMETA(DisplayName = "Bard"),
+    Cleric      UMETA(DisplayName = "Cleric"),
+    Druid       UMETA(DisplayName = "Druid"),
+    Fighter     UMETA(DisplayName = "Fighter"),
+    Monk        UMETA(DisplayName = "Monk"),
+    Paladin     UMETA(DisplayName = "Paladin"),
+    Ranger      UMETA(DisplayName = "Ranger"),
+    Rogue       UMETA(DisplayName = "Rogue"),
+    Sorcerer    UMETA(DisplayName = "Sorcerer"),
+    Warlock     UMETA(DisplayName = "Warlock"),
+    Wizard      UMETA(DisplayName = "Wizard")
+};
+
 // Charakter postaci (Alignment)
 UENUM(BlueprintType)
 enum class EAlignment : uint8
@@ -67,27 +146,7 @@ struct FAbilityScores
     UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Charisma = 10;
 };
 
-// 2. Klasy postaci (Classes)
-USTRUCT(BlueprintType)
-struct FClasses
-{
-    GENERATED_BODY()
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Barbarian;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Bard;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Cleric;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Druid;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Fighter;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Monk;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Paladin;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Ranger;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Rogue;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Sorcerer;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Warlock;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Wizard;
-};
-
-// 3. Rzuty Obronne (Saving Throws) - Flagi czy jest bieg³oœæ
+// 2. Rzuty Obronne (Saving Throws) - Flagi czy jest bieg³oœæ
 USTRUCT(BlueprintType)
 struct FSavingThrows
 {
@@ -101,7 +160,7 @@ struct FSavingThrows
     UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Charisma = EProficiencyLevel::None;
 };
 
-// 4. Umiejêtnoœci (Skills) - Flagi czy jest bieg³oœæ
+// 3. Umiejêtnoœci (Skills) - Flagi czy jest bieg³oœæ
 USTRUCT(BlueprintType)
 struct FSkillProficiencies
 {
@@ -127,7 +186,7 @@ struct FSkillProficiencies
     UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Survival = EProficiencyLevel::None;
 };
 
-// 5. Akcje (Actions)
+// 4. Akcje (Actions)
 USTRUCT(BlueprintType)
 struct FActions
 {
@@ -141,7 +200,7 @@ struct FActions
     UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 CurrentReactions;
 };
 
-// 6. ¯ycie i Œmieræ (Vitals)
+// 5. ¯ycie i Œmieræ (Vitals)
 USTRUCT(BlueprintType)
 struct FVitals
 {
@@ -152,16 +211,15 @@ struct FVitals
     UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 TemporaryHP;
 
     // Koœci Wytrzyma³oœci (Hit Dice)
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 TotalHitDice;     // Np. 5
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 CurrentHitDice;   // Np. 3
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EDiceType HitDiceType;  // Np. D8
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) TMap<EDiceType, int32> TotalHitDices;     // Np. 5 k6, 2 k8
+    UPROPERTY(EditAnywhere, BlueprintReadWrite) TMap<EDiceType, int32> CurrentHitDices;   // Np. 3 k6, 0 k8
 
     // Rzuty na œmieræ (Death Saves)
     UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 DeathSaveSuccesses; // 0-3
     UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 DeathSaveFailures;  // 0-3
 };
 
-// 7. Odpornoœci (Resistances) - Flagi czy jest odporny
+// 6. Odpornoœci (Resistances) - Flagi czy jest odporny
 USTRUCT(BlueprintType)
 struct FDamageResistances
 {
@@ -182,7 +240,7 @@ struct FDamageResistances
     UPROPERTY(EditAnywhere, BlueprintReadWrite) EResistances Thunder = EResistances::None;
 };
 
-// 8. Czary (Spell Slots)
+// 7. Czary (Spell Slots)
 USTRUCT(BlueprintType)
 struct FSpellSlots
 {
@@ -234,7 +292,7 @@ struct FDnD_Character_Sheet
     FString Level = "1";
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1. Info")
-    FClasses ClassLevels;
+    TMap<ECharacterClass, int32> ClassLevels;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1. Info")
     FString Race = "Human";
@@ -266,7 +324,13 @@ struct FDnD_Character_Sheet
     FSavingThrows SavingThrows;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "3. Skills")
-    FSkillProficiencies Skills;
+    FSkillProficiencies SkillProficiencies;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "3. Skills")
+    TSet<EWeaponType> WeaponProficiencies;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "3. Skills")
+    TSet<EArmorType> ArmorProficiencies;
 
     // Sekcja 4: Combat
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4. Combat")
