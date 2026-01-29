@@ -343,10 +343,10 @@ struct FDnD_Character_Sheet
     FDamageResistances Resistances;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4. Combat")
-    float MaxSpeed = 900.0f; // w cm (9 metrów = 30 stóp)
+    float MaxSpeed; // w cm (900.0f = 9 metrów = 30 stóp)
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4. Combat")
-    float CurrentSpeed = 900.0f; // w cm (9 metrów = 30 stóp)
+    float CurrentSpeed; // w cm (9 metrów = 30 stóp)
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4. Combat")
     int32 ArmorClass = 10;
