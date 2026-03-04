@@ -9,11 +9,54 @@
 // =================================================================
 
 UENUM(BlueprintType)
+enum class EAtributeType : uint8
+{
+    Strength        UMETA(DisplayName = "Strength"),
+    Dexterity       UMETA(DisplayName = "Dexterity"),
+    Constitution    UMETA(DisplayName = "Constitution"),
+    Intelligence    UMETA(DisplayName = "Intelligence"),
+    Wisdom          UMETA(DisplayName = "Wisdom"),
+    Charisma        UMETA(DisplayName = "Charisma")
+};
+
+UENUM(BlueprintType)
 enum class EProficiencyLevel : uint8
 {
     None        UMETA(DisplayName = "None"),
     Proficient  UMETA(DisplayName = "Proficient"),
     Expertise   UMETA(DisplayName = "Expertise")
+};
+
+UENUM(BlueprintType)
+enum class ESkillType : uint8
+{
+    // Si³a (Strength)
+    Athletics       UMETA(DisplayName = "Athletics"),
+
+    // Zrêcznoœæ (Dexterity)
+    Acrobatics      UMETA(DisplayName = "Acrobatics"),
+    SleightOfHand   UMETA(DisplayName = "Sleight of Hand"),
+    Stealth         UMETA(DisplayName = "Stealth"),
+
+    // Inteligencja (Intelligence)
+    Arcana          UMETA(DisplayName = "Arcana"),
+    History         UMETA(DisplayName = "History"),
+    Investigation   UMETA(DisplayName = "Investigation"),
+    Nature          UMETA(DisplayName = "Nature"),
+    Religion        UMETA(DisplayName = "Religion"),
+
+    // M¹droœæ (Wisdom)
+    AnimalHandling  UMETA(DisplayName = "Animal Handling"),
+    Insight         UMETA(DisplayName = "Insight"),
+    Medicine        UMETA(DisplayName = "Medicine"),
+    Perception      UMETA(DisplayName = "Perception"),
+    Survival        UMETA(DisplayName = "Survival"),
+
+    // Charyzma (Charisma)
+    Deception       UMETA(DisplayName = "Deception"),
+    Intimidation    UMETA(DisplayName = "Intimidation"),
+    Performance     UMETA(DisplayName = "Performance"),
+    Persuasion      UMETA(DisplayName = "Persuasion")
 };
 
 UENUM(BlueprintType)
@@ -48,20 +91,6 @@ enum class EArmorType : uint8
 };
 
 UENUM(BlueprintType)
-enum class ECharacterClass : uint8
-{
-    None, Barbarian, Bard, Cleric, Druid, Fighter, Monk, Paladin, Ranger, Rogue, Sorcerer, Warlock, Wizard
-};
-
-UENUM(BlueprintType)
-enum class EAlignment : uint8
-{
-    LawfulGood, NeutralGood, ChaoticGood,
-    LawfulNeutral, TrueNeutral, ChaoticNeutral,
-    LawfulEvil, NeutralEvil, ChaoticEvil
-};
-
-UENUM(BlueprintType)
 enum class EDiceType : uint8
 {
     D4, D6, D8, D10, D12, D20
@@ -81,42 +110,6 @@ struct FAbilityScores
     UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Intelligence = 10;
     UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Wisdom = 10;
     UPROPERTY(EditAnywhere, BlueprintReadWrite) int32 Charisma = 10;
-};
-
-USTRUCT(BlueprintType)
-struct FSavingThrows
-{
-    GENERATED_BODY()
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Strength = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Dexterity = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Constitution = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Intelligence = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Wisdom = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Charisma = EProficiencyLevel::None;
-};
-
-USTRUCT(BlueprintType)
-struct FSkillProficiencies
-{
-    GENERATED_BODY()
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Acrobatics = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel AnimalHandling = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Arcana = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Athletics = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Deception = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel History = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Insight = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Intimidation = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Investigation = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Medicine = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Nature = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Perception = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Performance = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Persuasion = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Religion = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel SleightOfHand = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Stealth = EProficiencyLevel::None;
-    UPROPERTY(EditAnywhere, BlueprintReadWrite) EProficiencyLevel Survival = EProficiencyLevel::None;
 };
 
 USTRUCT(BlueprintType)
@@ -192,19 +185,13 @@ public:
     FString CharacterName = "Unknown Hero";
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1. Info")
-    FString Level = "1";
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1. Info")
-    TMap<ECharacterClass, int32> ClassLevels;
+    int32 Level = 0;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1. Info")
     FString Race = "Human";
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1. Info")
     FString Background;
-
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1. Info")
-    EAlignment Alignment;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "1. Info")
     int32 ExperiencePoints = 0;
@@ -224,10 +211,10 @@ public:
 
     // --- SEKCJA 3: SKILLS ---
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "3. Skills")
-    FSavingThrows SavingThrows;
+    TMap<EAtributeType, EProficiencyLevel> SavingThrows;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "3. Skills")
-    FSkillProficiencies SkillProficiencies;
+    TMap<ESkillType, EProficiencyLevel> SkillProficiencies;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "3. Skills")
     TSet<EWeaponType> WeaponProficiencies;
@@ -240,10 +227,10 @@ public:
     FActions Actions;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4. Combat")
-    int32 MaxHP = 10;
+    int32 MaxHP = 0;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4. Combat")
-    int32 CurrentHP = 10;
+    int32 CurrentHP = 0;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "4. Combat")
     int32 TemporaryHP = 0;
